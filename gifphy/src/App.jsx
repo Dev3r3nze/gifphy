@@ -2,6 +2,7 @@ import './App.css'
 import  {useState,useEffect} from 'react'
 import getGifs from './services/getGifs'
 import Gif from './components/gif'
+import FavouritesGifs from './components/FavouritesGifs'
 
 function App() {
 
@@ -11,11 +12,23 @@ function App() {
   const initialGifs = ["https://media.giphy.com/media/p4w0AMZJa2EtG/giphy.gif", "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdHF4ajNpbzF6b2E3YXU4bDZ2c2U2cWE2ajNhZjhrbGJ4YnBnb2syMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/MDJ9IbxxvDUQM/giphy.gif"]
   const [gifs, setGifs] = useState(initialGifs)
 
+   // Estado para los ids de los gifs favoritos
+   const [favouriteIds, setFavouriteIds] = useState(["https://media.giphy.com/media/p4w0AMZJa2EtG/giphy.gif"]);
+
+   // Función para manejar el clic en el botón de favorito
+   const handleFavClick = (id) => {
+     if (favouriteIds.includes(id)) {
+       setFavouriteIds(favouriteIds.filter(favId => favId !== id));
+     } else {
+       setFavouriteIds([...favouriteIds, id]);
+     }
+   };
 
   useEffect(() => {
     getGifs({keyword: keyword, n: num})
     .then(gifs => setGifs(gifs))
   }, [keyword, num])
+
 
   function handleSearch() {
     const textInput = document.getElementById("textInput")
@@ -33,19 +46,35 @@ function App() {
     <>
       <h1>Search Gifs</h1>
       
-      <h2>Keyword</h2>
-      <input type="text" id="textInput" />
+      <div className='gifForm'>
+        <h2>Keyword</h2>
+        <input type="text" id="textInput" />
 
-      <h2>Number of gifs</h2>
-      <input type="number" id="numInput" value="5"/>
+        <h2>Number of gifs</h2>
+        <input type="number" id="numInput" placeholder="5" defaultValue={5}/>
 
-      <br></br>
-      <button onClick={handleSearch}>Search</button> 
-      <button onClick={handleClear}>Clear</button>
+        <br></br>
+        <button onClick={handleSearch}>Search</button> 
+        <button onClick={handleClear}>Clear</button>
+      </div>
 
-      {gifs.map((singleGif, index) => {
-        return <Gif key={index} title={singleGif.title} url={singleGif.url} />
+      <div className='gifContainer'>
+      {gifs.map((gif) => {
+        return <Gif 
+        key={gif.id} 
+        gif={gif} 
+        handleFavClick={handleFavClick} 
+        isFav={favouriteIds.includes(gif.id)}
+        title = {gif.title}
+        url = {gif.url}
+      />
       })}
+      {gifs.length === 0 && <p>No gifs found</p> && keyword !== ""}
+      </div>
+
+      <FavouritesGifs favouriteIds={favouriteIds} gifs={gifs}/>
+
+
     </>
   )
 }

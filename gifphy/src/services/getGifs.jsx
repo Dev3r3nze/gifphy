@@ -8,9 +8,9 @@ export default function getGifs({keyword = "cat",n = 5}) {
     .then(res => {
         const {data} = res
         const gifs = data.map(image => {
-            const {title, images} = image
+            const {title, images, id} = image
             const {url} = images.original
-            return {title, url}
+            return {title, url, id}
         })
         return gifs
     })
