@@ -13,7 +13,7 @@ function App() {
   const [gifs, setGifs] = useState(initialGifs)
 
    // Estado para los ids de los gifs favoritos
-   const [favouriteIds, setFavouriteIds] = useState(["https://media.giphy.com/media/p4w0AMZJa2EtG/giphy.gif"]);
+   const [favouriteIds, setFavouriteIds] = useState(["p4w0AMZJa2EtG","K0JrA2VbkFy2A"]);
 
    // Función para manejar el clic en el botón de favorito
    const handleFavClick = (id) => {
@@ -72,7 +72,7 @@ function App() {
       {gifs.length === 0 && <p>No gifs found</p> && keyword !== ""}
       </div>
 
-      <FavouritesGifs favouriteIds={favouriteIds} gifs={gifs}/>
+      <FavouritesGifs favouriteIds={favouriteIds} handleFavClick={handleFavClick}/>
 
 
     </>
