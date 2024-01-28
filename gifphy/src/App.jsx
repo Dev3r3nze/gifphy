@@ -12,17 +12,31 @@ function App() {
   const initialGifs = ["https://media.giphy.com/media/p4w0AMZJa2EtG/giphy.gif", "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdHF4ajNpbzF6b2E3YXU4bDZ2c2U2cWE2ajNhZjhrbGJ4YnBnb2syMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/MDJ9IbxxvDUQM/giphy.gif"]
   const [gifs, setGifs] = useState(initialGifs)
 
-   // Estado para los ids de los gifs favoritos
-   const [favouriteIds, setFavouriteIds] = useState(["p4w0AMZJa2EtG","K0JrA2VbkFy2A"]);
+  // Función de estado inicial para cargar los favoritos del localStorage
+  const loadFavs = () => {
+    const favs = localStorage.getItem('favourites');
+    return favs ? JSON.parse(favs) : [];
+  };
 
-   // Función para manejar el clic en el botón de favorito
-   const handleFavClick = (id) => {
-     if (favouriteIds.includes(id)) {
-       setFavouriteIds(favouriteIds.filter(favId => favId !== id));
-     } else {
-       setFavouriteIds([...favouriteIds, id]);
-     }
-   };
+  // Estado para los ids de los gifs favoritos
+  const [favouriteIds, setFavouriteIds] = useState(loadFavs);
+  // "p4w0AMZJa2EtG","K0JrA2VbkFy2A"
+
+  // Función para manejar el clic en el botón de favorito
+  const handleFavClick = (id) => {
+    setFavouriteIds((currentFavs) => {
+      if (currentFavs.includes(id)) {
+        return currentFavs.filter(favId => favId !== id);
+      } else {
+        return [...currentFavs, id];
+      }
+    });
+  };
+
+  // Guardamos los favoritos en localStorage cuando cambia el estado
+  useEffect(() => {
+    localStorage.setItem('favourites', JSON.stringify(favouriteIds));
+  }, [favouriteIds]);
 
   useEffect(() => {
     getGifs({keyword: keyword, n: num})
@@ -59,7 +73,7 @@ function App() {
       </div>
 
       <div className='gifContainer'>
-      {gifs.map((gif) => {
+      {gifs.length > 0 && gifs.map((gif) => {
         return <Gif 
         key={gif.id} 
         gif={gif} 
@@ -72,7 +86,7 @@ function App() {
       {gifs.length === 0 && <p>No gifs found</p> && keyword !== ""}
       </div>
 
-      <FavouritesGifs favouriteIds={favouriteIds} handleFavClick={handleFavClick}/>
+      {favouriteIds.length > 0 && <FavouritesGifs favouriteIds={favouriteIds} handleFavClick={handleFavClick}/>}
 
 
     </>
@@ -81,3 +95,15 @@ function App() {
 
 
 export default App
+
+
+/// Pendiente
+// 1. Mantener favs al recargar la página
+// 2. Historial de búsquedas
+// 3. Historial de gifs vistos
+// 4. Botón de deshacer (undo)
+
+/// Avanzado
+// 1. Crear una página de detalle de un gif
+// 2. Que el usuario pueda crear carpetas con sus favoritos
+// 3. Que el usuario pueda compartir gifs

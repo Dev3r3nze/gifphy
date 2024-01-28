@@ -14,7 +14,6 @@ function FavouritesGifs({ favouriteIds, handleFavClick}) {
         .then(gifs => setFavouriteGifs(gifs))
     }, [favouriteIds])
 
-
     return (
         <>
             <h2>Favourite Gifs</h2>
@@ -29,7 +28,7 @@ function FavouritesGifs({ favouriteIds, handleFavClick}) {
                 url = {gif.url}
               />
             ))}
-            {favouriteIds.length === 0 && <p>No gifs found</p> && favouriteIds !== ""}
+            {favouriteGifs.length == 0 && <p>No favourite gifs yet</p>}
             
         </div>
         </>
