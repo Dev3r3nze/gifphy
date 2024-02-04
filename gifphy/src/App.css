@@ -78,3 +78,31 @@
   align-items: center;
 
 }
+.lastsSearchsContainer{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1vh;
+  flex-direction: column;
+  padding-inline-start: 0;
+}
+.lastSearchText{
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  transition: all 0.25s;
+  list-style: none;
+  padding: 0.5rem;
+  width: 100%;
+}
+.lastSearchText:hover{
+  text-decoration: underline;
+  cursor: pointer;
+  background-color: rgba(245, 245, 220, 0.212);
+  border-radius: 8px;
+  color: #000;
+}
+
+.smallBtn{
+  width: 50% !important;
+}
